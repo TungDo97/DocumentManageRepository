@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Document Manage Application</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function (){
+            maxFileSize = 10 * 1024 * 1024; // 10MB
+            $("#fileUpload").change( function (){
+                fileSize = this.files[0].size;
+
+                if( fileSize > maxFileSize){
+                    this.setCustomValidity("You cannot upload a file with size larger than 10MB")
+                    this.reportValidity();
+                }
+                else{
+                    this.setCustomValidity("");
+                }
+            });
+
+            $("img").mouseenter(function (){
+               $(this).animate({"width": "400px","height": "400px"},1000,function (){} ) ;
+               $(this).parent().siblings(".contain_file_name").children().toggleClass("change_color_file_name");
+                $(this).parent().siblings(".file_size").toggleClass("change_color_file_size");
+
+            });
+            $("img").mouseleave(function (){
+                $(this).animate({"width": "300px","height": "300px"},1000,function (){} ) ;
+                $(this).parent().siblings(".contain_file_name").children().toggleClass("change_color_file_name");
+                $(this).parent().siblings(".file_size").toggleClass("change_color_file_size");
+            });
+
+            $("#request_get").click(function (){
+                $("#content").load("/demoGetAjaxJquery", function (data,status){
+                    alert("Data : " +data + " , status : " + status );
+                    console.log("Data : " +data  + " , status : " + status );
+                });
+                // $.get("/demoGetAjaxJquery", function (status){
+                //     alert("Data : " + " , status : " + status );
+                //     console.log("Data : " + " , status : " + status );
+                // });
+            });
+
+            $("#request_post").click(function (){
+                $.post("/demoPostAjaxJquery",{pa1:"Xin ", pa2:"chao "},executeAfterRequestPostSuccessfully);
+            });
+        });
+
+        function executeAfterRequestPostSuccessfully(contentTxt,statusTxt){
+            alert("Data is : " + contentTxt + ". Status is : " + statusTxt);
+            console.log("Data is : " + contentTxt + ". Status is : " + statusTxt);
+        }
+    </script>
+
+    <style>
+        .change_color_file_name {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .change_color_file_size {
+            color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid text-center">
+    <h1 class="software_name">Document Manage</h1>
+
+    <div class="text-danger">
+        <h3>[[${successMessage}]]</h3>
+    </div>
+
+    <div class="text-danger">
+        <h3>[[${errorMessage}]]</h3>
+    </div>
+    <div id="content">Kakaka</div>
+    <button id="request_get">Send request Http method get</button>
+    <button id="request_post">Send request Http method post</button>
+    <form th:action="@{/upload_file}" enctype="multipart/form-data" method="post"
+    style="max-width: 700px; margin: 0 auto" >
+        <div class="border rounded m-3">
+            <h2>Upload your files: </h2>
+            <p>
+                <input type="file" name="fileAttachment" id="fileUpload" required>
+            </p>
+            <p>
+                <input type="submit" value="Upload" class="btn btn-primary">
+            </p>
+        </div>
+    </form>
+
+</div>
+
+<div class="row border rounded m-3 p-3">
+    <th:block th:each="doc,iter: ${docs}">
+<!--        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>-->
+        <div class="col text-center">
+            <div>
+                <img th:id="img + ${iter.index}" th:src="@{'data:image/png;base64,'+${doc.imageBase64}}"  th:alt="@{/static/images/image_title_file.png}" style="width: 300px; height: 300px" />
+            </div>
+            <div class="contain_file_name">
+                <a th:href="@{/download_file/{id_document}(id_document=${doc.id})}" > [[${doc.nameFile}]] </a>
+            </div>
+            <div class="file_size">
+               ( [[${#numbers.formatInteger(doc.sizeFile,4,'COMMA')}]] bytes )
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<div class="text-danger">
+    <a href="/find_your_current_location_on_map">Do you want to find your current location? Click now</a>
+</div>
+
+<div class="text-danger">
+    <a href="/find_your_current_location_on_map_2">Do you want to find your current location 2? Click now</a>
+</div>
+
+
+</body>
+</html>

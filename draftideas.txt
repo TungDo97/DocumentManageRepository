@@ -1,0 +1,16 @@
+Manage Document
+
+1. Upload , show  and download file ( done )
+- upload : there are 2 ways ( based on save file) :
+         + save to System file ( save on server's disk)
+         + save to Database
+
+- show : there are 2 ways ( based on save file) :
+         + save to System file ( save on server's disk)
+         + save to Database
+
+- download : there is a way -> download from database
+
+2. Clock in/ clock out ( pending )
++ take  currently user or device's address and coordinate. ( use Google API ) ( need to buy a account use Google API ) ( pending )
++ take directly photo -> then save to database

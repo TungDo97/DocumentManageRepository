@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Manage Application</title>
+
+</head>
+<body>
+<h1>Hi guests</h1>
+<button id="start">start</button>
+<button id="stop">stop</button>
+
+<script>
+    var geocoder;
+    var latLng;
+    const start= document.querySelector("#start");
+    const stop= document.querySelector("#stop");
+    var gps;
+    var address;
+
+
+    start.addEventListener("click", () => {
+       navigator.geolocation.getCurrentPosition(
+           function(position) {
+               geocoder = new google.maps.Geocoder();
+               latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+               console.log("Xin chào : " + geocoder + " : " + latLng);
+
+               geocoder.geocode({ 'latLng': latLng}, function (results, status) {
+                   console.log("Xin chào 2 :" + results + " : " + status);
+                   if (status == google.maps.GeocoderStatus.OK) {
+                       gps = '(' + position.coords.latitude + ',' + position.coords.longitude + ')';
+                       address = results[0].formatted_address;
+
+                       console.log("GPS: " + gps + "; Address: " + address);
+                       // callback(gps, address);
+                   }
+
+                   else {
+                       console.log("Xin chào 3");
+                       console.log("Geocoding failed: " + status);
+                       alert("Tung xin chao: " + status);
+                   }
+               });
+           },
+           error => {
+               console.log("Xin chào 4");
+               console.log(error);
+           }
+       )
+    });
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfKu9XJ0jr19cj46HYSqQrNDU-oX0LKmY&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/geocode/json?address=the%20white%20house&sensor=false"></script>
+<script async="async" defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg5k20WKdShKwTvx33l6ZKukscjTS7M64&amp;callback=SynFaces.geolocation.onloadGoogleMapAPI"/>
+</body>
+</html>
