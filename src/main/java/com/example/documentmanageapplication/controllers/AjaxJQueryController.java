@@ -17,7 +17,7 @@ public class AjaxJQueryController {
     @PostMapping("/demoPostAjaxJquery")
     public ResponseEntity demoPostAjaxJquery(String pa1, String pa2){
         System.out.println("Data is sent : " + pa1 + " : " + pa2);
-        String returnName = pa1 + pa2 + " Tung!";
+        String returnName = pa1 + pa2 + " Tung! Today is a new day.";
         return ResponseEntity.status(500).body( returnName);
     }
 }
